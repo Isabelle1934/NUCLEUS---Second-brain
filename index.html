@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>NUCLEUS</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <h1>Checklist</h1>
+
+  <!-- Campo para adicionar tarefas -->
+  <input type="text" id="nova-tarefa" placeholder="Digite uma tarefa">
+  <button id="adicionar">Adicionar</button>
+
+  <!-- Lista de tarefas -->
+  <ul id="lista-tarefas"></ul>
+
+  <h2>Progresso</h2>
+  <canvas id="grafico"></canvas>
+
+  <!-- Barra de progresso -->
+  <div id="progresso-container">
+    <div id="progresso-barra"></div>
+  </div>
+  <p id="progresso-texto">0% concluído</p>
+
+  <!-- Gamificação -->
+  <h2>Gamificação</h2>
+  <p id="pontuacao">Pontuação: 0</p>
+  <p id="nivel">Nível: 1</p>
+
+  <!-- Cérebro Mental -->
+  <h2>Cérebro Mental</h2>
+  <canvas id="cerebro" width="400" height="400"></canvas>
+
+  <!-- Histórico Diário -->
+  <h2>Histórico Diário</h2>
+  <div id="historico-container"></div>
+
+  <!-- Chart.js -->
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  <script src="script.js"></script>
+</body>
+</html>
