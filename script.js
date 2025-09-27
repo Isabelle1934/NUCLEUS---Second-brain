@@ -88,9 +88,9 @@ let cerebro = new Chart(ctxCerebro, {
     datasets: [{
       label: "Seu Cérebro",
       data: [0, 0, 0, 0, 0],
-      backgroundColor: "rgba(63, 81, 181, 0.3)",
-      borderColor: "#3f51b5",
-      pointBackgroundColor: "#3f51b5",
+      backgroundColor: "rgba(218, 165, 32, 0.420)", /* área preenchida */
+      borderColor: "goldenrod", /* borda da linha */
+      pointBackgroundColor: "goldenrod", /* pontos */
       pointBorderColor: "#fff"
     }]
   },
@@ -148,28 +148,122 @@ function atualizarCerebroAnimado() {
 function salvarHistorico() {
   const hoje = new Date().toISOString().split('T')[0];
   let historico = JSON.parse(localStorage.getItem("historico")) || {};
-  let concluidasHoje = tarefas.filter(t => t.concluida).length;
-  historico[hoje] = concluidasHoje;
+
+  let concluidasHoje = tarefas.filter(t => t.concluida).map(t => t.texto);
+
+  historico[hoje] = {
+    quantidade: concluidasHoje.length,
+    tarefas: concluidasHoje
+  };
+
   localStorage.setItem("historico", JSON.stringify(historico));
   atualizarHistorico();
 }
 
+// ================== HISTÓRICO DIÁRIO EM CALENDÁRIO ==================
 function atualizarHistorico() {
   const container = document.getElementById("historico-container");
   container.innerHTML = "";
 
   let historico = JSON.parse(localStorage.getItem("historico")) || {};
-  Object.keys(historico).sort().forEach(data => {
-    const div = document.createElement("div");
-    div.classList.add("dia");
 
-    let val = historico[data];
-    div.style.backgroundColor = val === 0 ? "#eee" : `rgba(76, 175, 80, ${Math.min(val / 5, 1)})`;
+  // Pegar o mês atual
+  let hoje = new Date();
+  let ano = hoje.getFullYear();
+  let mes = hoje.getMonth();
 
-    div.title = `${data}: ${val} tarefas concluídas`;
-    container.appendChild(div);
+  // Quantos dias tem esse mês
+  let primeiroDia = new Date(ano, mes, 1);
+  let ultimoDia = new Date(ano, mes + 1, 0);
+  let totalDias = ultimoDia.getDate();
+
+  // Criar tabela de calendário
+  let tabela = document.createElement("table");
+  tabela.classList.add("calendario");
+
+  // Cabeçalho com dias da semana
+  let cabecalho = document.createElement("tr");
+  ["Dom", "Seg", "Ter", "Qua", "Qui", "Sex", "Sáb"].forEach(dia => {
+    let th = document.createElement("th");
+    th.textContent = dia;
+    cabecalho.appendChild(th);
   });
+  tabela.appendChild(cabecalho);
+
+  // Preencher calendário
+  let linha = document.createElement("tr");
+  // Espaços antes do 1º dia
+  for (let i = 0; i < primeiroDia.getDay(); i++) {
+    linha.appendChild(document.createElement("td"));
+  }
+
+  for (let dia = 1; dia <= totalDias; dia++) {
+    let td = document.createElement("td");
+    let dataStr = `${ano}-${String(mes + 1).padStart(2, "0")}-${String(dia).padStart(2, "0")}`;
+    
+    let info = historico[dataStr] || { quantidade: 0, tarefas: [] };
+    td.textContent = dia;
+
+    // Cor de fundo conforme tarefas concluídas
+    if (info.quantidade > 0) {
+      td.style.backgroundColor = `rgba(76, 175, 80, ${Math.min(info.quantidade / 5, 1)})`;
+      td.style.color = "white";
+      td.style.fontWeight = "bold";
+      td.style.cursor = "pointer";
+
+      td.addEventListener("click", () => mostrarDetalhesDia(dataStr, info));
+    }
+
+    linha.appendChild(td);
+
+    // Nova linha a cada sábado
+    if ((primeiroDia.getDay() + dia) % 7 === 0) {
+      tabela.appendChild(linha);
+      linha = document.createElement("tr");
+    }
+  }
+
+  // Preencher células vazias no final
+  if (linha.children.length > 0) {
+    while (linha.children.length < 7) {
+      linha.appendChild(document.createElement("td"));
+    }
+    tabela.appendChild(linha);
+  }
+
+  // Título do mês
+  let titulo = document.createElement("h3");
+  titulo.textContent = hoje.toLocaleDateString("pt-BR", { month: "long", year: "numeric" });
+
+  container.appendChild(titulo);
+  container.appendChild(tabela);
 }
+
+
+// ================== MODAL DETALHES DO DIA ==================
+function mostrarDetalhesDia(data, info) {
+  let modal = document.createElement("div");
+  modal.classList.add("modal");
+
+  let conteudo = `
+    <div class="modal-content">
+      <span class="fechar">&times;</span>
+      <h3>Dia ${data}</h3>
+      <p><b>${info.quantidade}</b> tarefas concluídas:</p>
+      <ul>
+        ${info.tarefas.map(t => `<li>${t}</li>`).join("")}
+      </ul>
+    </div>
+  `;
+  modal.innerHTML = conteudo;
+
+  document.body.appendChild(modal);
+
+  // Fechar modal
+  modal.querySelector(".fechar").onclick = () => modal.remove();
+  modal.addEventListener("click", (e) => { if (e.target === modal) modal.remove(); });
+}
+
 
 // ================== FUNÇÃO ATUALIZAR GRÁFICOS ==================
 function atualizarGrafico() {
