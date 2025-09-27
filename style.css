@@ -3,6 +3,7 @@ body {
   max-width: 500px;
   margin: 20px auto;
   text-align: center;
+  background-color: whitesmoke;
 }
 
 input {
@@ -18,6 +19,7 @@ button {
 ul {
   list-style: none;
   padding: 0;
+  margin-top: 15px;
 }
 
 li {
@@ -25,9 +27,42 @@ li {
   margin: 5px 0;
   padding: 10px;
   display: flex;
-  justify-content: space-between;
-  align-items: center;
+  align-items: center; /* centraliza verticalmente */
+  justify-content: flex-start; /* itens alinhados em linha */
+  gap: 10px; /* espançamento entre checkbox, texto e botão */
+  border-radius: 8px;
+  box-shadow: 0 2px 5px rgba(0,0,0,0.05);
+  animation: 0.2s ease;
 }
+
+li span {
+  flex: 1; /* ocupa o espaço do meio */
+  text-align: left; /* texto alinhado ã esquerda */
+}
+
+li button {
+  background: goldenrod;
+  border: none;
+  color: white;
+  padding: 5px 10px;
+  border-radius: 6px;
+  cursor: pointer;
+  transition: all 0.2s ease; /* suaviza a animação */
+}
+
+li button:hover {
+  animation: shake 0.3s ease;
+  background: red
+}
+
+@keyframes shake {
+  0% { transform: translateX(0); }
+  25% { transform: translateX(-1px); }
+  50% { transform: translateX(1px); }
+  75% { transform: translateX(-1px); }
+  100% { transform: translateX(0); }
+}
+
 
 #progresso-container {
   width: 100%;
@@ -68,4 +103,73 @@ li {
   justify-content: center;
   font-size: 12px;
   cursor: default;
+}
+
+/* Modal Detalhes Histórico */
+.modal {
+  position: fixed;
+  top: 0; left: 0;
+  width: 100%; height: 100%;
+  background: rgba(0,0,0,0.6);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 1000;
+}
+
+.modal-content {
+  background: white;
+  padding: 20px;
+  border-radius: 10px;
+  max-width: 300px;
+  width: 90%;
+  text-align: left;
+  box-shadow: 0 4px 10px rgba(0,0,0,0.3);
+  animation: aparecer 0.8s ease;
+}
+
+.modal-content h3 {
+  margin-top: 0;
+}
+
+.modal-content ul {
+  padding-left: 20px;
+}
+
+.modal .fechar {
+  float: right;
+  font-size: 20px;
+  cursor: pointer;
+  color: #555;
+}
+
+@keyframes aparecer {
+  from { opacity: 0; transform: translateY(-20px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+/* Calendário mensal */
+.calendario {
+  width: 100%;
+  border-collapse: collapse;
+  margin-top: 10px;
+  text-align: center;
+}
+
+.calendario th {
+  background: goldenrod;
+  color: white;
+  padding: 6px;
+  font-weight: bold;
+}
+
+.calendario td {
+  border: 2px solid c;
+  height: 35px;
+  vertical-align: middle;
+  transition: 0.2s;
+}
+
+.calendario td:hover {
+  transform: scale(1.05);
 }
