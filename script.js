@@ -296,6 +296,25 @@ function atualizarGrafico() {
   salvarHistorico();
 }
 
+// Seleciona botões do menu e as seções
+const botoesMenu = document.querySelectorAll(".sidebar li");
+const secoes = document.querySelectorAll("main section");
+
+// Alternar entre seções
+botoesMenu.forEach(botao => {
+  botao.addEventListener("click", () => {
+    // Pega qual seção abrir
+    let alvo = botao.getAttribute("data-section");
+
+    // Esconde todas
+    secoes.forEach(sec => sec.classList.remove("ativo"));
+
+    // Mostra a clicada
+    document.getElementById(alvo).classList.add("ativo");
+  });
+});
+
+
 // ================== INICIALIZAÇÃO ==================
 renderizar();
 atualizarGrafico();
