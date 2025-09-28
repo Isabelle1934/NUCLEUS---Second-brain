@@ -173,3 +173,65 @@ li button:hover {
 .calendario td:hover {
   transform: scale(1.05);
 }
+
+/* === SIDEBAR (menu lateral) === */
+.sidebar {
+  width: 220px;
+  background: #000;          /* fundo preto */
+  color: goldenrod;          /* texto dourado */
+  min-height: 100vh;         /* ocupa altura total */
+  padding: 20px;
+  position: fixed;           /* fixa do lado esquerdo */
+  top: 0;
+  left: 0;
+  display: flex;
+  flex-direction: column;
+  box-shadow: 2px 0 8px rgba(0,0,0,0.4);
+}
+
+.sidebar h2 {
+  text-align: center;
+  margin-bottom: 20px;
+}
+
+.sidebar ul {
+  list-style: none;
+  padding: 0;
+}
+
+.sidebar li {
+  padding: 12px;
+  margin-bottom: 8px;
+  background: rgba(218,165,32,0.15); /* dourado claro */
+  border-radius: 8px;
+  cursor: pointer;
+  transition: 0.3s;
+  color: #fff;
+}
+
+.sidebar li:hover {
+  background: goldenrod;
+  color: #000;
+  transform: translateX(5px);
+}
+
+/* === CONTEÚDO PRINCIPAL === */
+.conteudo {
+  margin-left: 240px; /* espaço para a sidebar */
+  padding: 20px;
+}
+
+/* === SEÇÕES === */
+section {
+  display: none;
+  animation: aparecer 0.4s ease;
+}
+
+section.ativo {
+  display: block;
+}
+
+@keyframes aparecer {
+  from { opacity: 0; transform: translateY(10px); }
+  to { opacity: 1; transform: translateY(0); }
+}
